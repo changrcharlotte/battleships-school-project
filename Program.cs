@@ -153,93 +153,111 @@ namespace battleships
             {
                 Console.WriteLine("which column would you like to put your " + boatTypes[count] + ", please enter a letter");
                 string inputString = Console.ReadLine();
-                char container1 = Char.ToUpper(Convert.ToChar(inputString));
-                if (string.IsNullOrEmpty(inputString) == false && inputString.Length == 1 && Char.IsDigit(container1) == false)
+                if (string.IsNullOrEmpty(inputString) == false && inputString.Length == 1)
+                
                 {
-                    int col = Convert.ToInt32(container1) - 64;
-
-                    Console.WriteLine("which row would you like to put your " + boatTypes[count] + ", please enter a number");
-                    string text = Console.ReadLine();
-                    if (int.TryParse(text, out int row))
+                    char container1 = Char.ToUpper(Convert.ToChar(inputString));
+                    if (char.IsDigit(container1) == false)
                     {
+                        int col = Convert.ToInt32(container1) - 64;
 
-                        if (Usergrid[row, col] == 'd' || Usergrid[row, col] == 's' || Usergrid[row, col] == 'c')
+                        Console.WriteLine("which row would you like to put your " + boatTypes[count] + ", please enter a number");
+                        string text = Console.ReadLine();
+                        if (int.TryParse(text, out int row))
                         {
-                            Console.WriteLine("There is already a boat here.Try again");
-                            count--;
+
+                            if (Usergrid[row, col] == 'd' || Usergrid[row, col] == 's' || Usergrid[row, col] == 'c')
+                            {
+                                Console.WriteLine("There is already a boat here.Try again");
+                                count--;
+                            }
+                            else
+                            {
+                                if (count == 0 || count == 1)//destroyer
+                                {
+                                    Usergrid[row, col] = 'd';
+                                    displayGrid(Usergrid);
+                                }
+                                else if (count == 2 || count == 3)//submarine
+                                {
+                                    Console.WriteLine("What orientation would you like your" + boatTypes[count] + " ? type in (1) for horizontal and (2) for vertical");
+                                    if (int.TryParse(Console.ReadLine(), out int orientation))
+                                    {
+                                        if ((orientation ==1 & col == 8) || (orientation ==2 && row == 8)){
+                                            Console.WriteLine("invalid,out of range,  try again");
+                                            count--;
+  
+                                        }
+                                        else
+                                        {
+                                            if (orientation == 1 && Usergrid[row, col + 1] != 'd' && Usergrid[row, col + 1] != 's' && Usergrid[row, col + 1] != 'c')
+                                            {
+                                                Usergrid[row, col] = 's';
+                                                Usergrid[row, col + 1] = 's';
+                                            }
+                                            else if (orientation == 2 && Usergrid[row + 1, col] != 'd' && Usergrid[row + 1, col] != 's' && Usergrid[row + 1, col] != 'c')
+                                            {
+                                                Usergrid[row, col] = 's';
+                                                Usergrid[row + 1, col] = 's';
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("This option is unavailable. Try again");
+                                                count--;
+                                            }
+                                        }
+                                        
+                                        displayGrid(Usergrid);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Try again");
+                                        count--;
+                                    }
+
+                                }
+                                else if (count == 4)//carrier
+                                {
+                                    Console.WriteLine("What orientation would you like your" + boatTypes[count] + " ? type in (1) for horizontal and (2) for vertical");
+                                    if (int.TryParse(Console.ReadLine(), out int orientation))
+                                    {
+                                        if (((container1 == 'G' || container1 == 'H') && orientation == 1) || ((row == 7 || row == 8) && orientation == 2))
+                                        {
+                                            Console.WriteLine("This option is off the grid. Try again");
+                                            count--;
+                                        }
+                                        else if (orientation == 1 && Usergrid[row, col + 1] != 'd' && Usergrid[row, col + 1] != 's' && Usergrid[row, col + 1] != 'c' && Usergrid[row, col + 2] != 'd' && Usergrid[row, col + 2] != 's' && Usergrid[row, col + 2] != 'c')
+                                        {
+                                            Usergrid[row, col] = 'c';
+                                            Usergrid[row, col + 1] = 'c';
+                                            Usergrid[row, col + 2] = 'c';
+                                        }
+                                        else if (orientation == 2 && Usergrid[row + 1, col] != 'd' && Usergrid[row + 1, col] != 's' && Usergrid[row + 1, col] != 'c' && Usergrid[row + 2, col] != 'd' && Usergrid[row + 2, col] != 's' && Usergrid[row + 2, col] != 'c')
+                                        {
+                                            Usergrid[row, col] = 'c';
+                                            Usergrid[row + 1, col] = 'c';
+                                            Usergrid[row + 2, col] = 'c';
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("This option is unavailable. Try again");
+                                            count--;
+                                        }
+                                        displayGrid(Usergrid);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("wrong format. Try again");
+                                        count--;
+                                    }
+
+                                }
+                            }
                         }
                         else
                         {
-                            if (count == 0 || count == 1)//destroyer
-                            {
-                                Usergrid[row, col] = 'd';
-                                displayGrid(Usergrid);
-                            }
-                            else if (count == 2 || count == 3)//submarine
-                            {
-                                Console.WriteLine("What orientation would you like your" + boatTypes[count] + " ? type in (1) for horizontal and (2) for vertical");
-                                if (int.TryParse(Console.ReadLine(), out int orientation))
-                                {
-                                    if (orientation == 1 && Usergrid[row, col + 1] != 'd' && Usergrid[row, col + 1] != 's' && Usergrid[row, col + 1] != 'c')
-                                    {
-                                        Usergrid[row, col] = 's';
-                                        Usergrid[row, col + 1] = 's';
-                                    }
-                                    else if (orientation == 2 && Usergrid[row + 1, col] != 'd' && Usergrid[row + 1, col] != 's' && Usergrid[row + 1, col] != 'c')
-                                    {
-                                        Usergrid[row, col] = 's';
-                                        Usergrid[row + 1, col] = 's';
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("This option is unavailable. Try again");
-                                        count--;
-                                    }
-                                    displayGrid(Usergrid);
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Try again");
-                                    count--;
-                                }
-
-                            }
-                            else if (count == 4)//carrier
-                            {
-                                Console.WriteLine("What orientation would you like your" + boatTypes[count] + " ? type in (1) for horizontal and (2) for vertical");
-                                if (int.TryParse(Console.ReadLine(), out int orientation))
-                                {
-                                    if (((container1 == 'G' || container1 == 'H') && orientation == 1) || ((row == 7 || row == 8) && orientation == 2))
-                                    {
-                                        Console.WriteLine("This option is off the grid. Try again");
-                                        count--;
-                                    }
-                                    else if (orientation == 1 && Usergrid[row, col + 1] != 'd' && Usergrid[row, col + 1] != 's' && Usergrid[row, col + 1] != 'c' && Usergrid[row, col + 2] != 'd' && Usergrid[row, col + 2] != 's' && Usergrid[row, col + 2] != 'c')
-                                    {
-                                        Usergrid[row, col] = 'c';
-                                        Usergrid[row, col + 1] = 'c';
-                                        Usergrid[row, col + 2] = 'c';
-                                    }
-                                    else if (orientation == 2 && Usergrid[row + 1, col] != 'd' && Usergrid[row + 1, col] != 's' && Usergrid[row + 1, col] != 'c' && Usergrid[row + 2, col] != 'd' && Usergrid[row + 2, col] != 's' && Usergrid[row + 2, col] != 'c')
-                                    {
-                                        Usergrid[row, col] = 'c';
-                                        Usergrid[row + 1, col] = 'c';
-                                        Usergrid[row + 2, col] = 'c';
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("This option is unavailable. Try again");
-                                        count--;
-                                    }
-                                    displayGrid(Usergrid);
-                                }
-                                else
-                                {
-                                    Console.WriteLine("wrong format. Try again");
-                                    count--;
-                                }
-
-                            }
+                            Console.WriteLine("Incorrect format, try again");
+                            count--;
                         }
                     }
                     else
@@ -248,11 +266,13 @@ namespace battleships
                         count--;
                     }
                 }
+
                 else
                 {
-                    Console.WriteLine("Incorrect format, try again");
+                    Console.WriteLine("Incorrect format try again");
                     count--;
                 }
+                
             }
         }
         static void makeCompFleet(char[,] compGrid)
