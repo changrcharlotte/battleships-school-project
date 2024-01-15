@@ -106,8 +106,6 @@ namespace battleships
                 Console.WriteLine("This is your fleet grid from where you left off");
             displayGrid(boatGrid);
 
-            Console.WriteLine("testing: here is the computer's grid");
-            displayGrid(CompBoatGrid);
 
             Console.WriteLine("This is your target tracker from where you left off: ");
             displayGrid(UserTargetTracker);
